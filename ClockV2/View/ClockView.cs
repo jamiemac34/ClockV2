@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ClockV2.View;
 
 namespace ClockV2
 {
@@ -47,6 +48,22 @@ namespace ClockV2
 
             var g = e.Graphics;
             drawingHelper.DrawClock(g, currentTime, Panel_Clock.Width, Panel_Clock.Height);
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            var formPopup = new DialougeAdd();
+            formPopup.Show(this);
+        }
+
+        private void btnView_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnLoad_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
