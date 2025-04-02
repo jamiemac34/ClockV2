@@ -32,7 +32,7 @@
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnView = new System.Windows.Forms.Button();
             this.btnLoad = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblNextAlarm = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // Panel_Clock
@@ -75,20 +75,20 @@
             // 
             // label1
             // 
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label1.Location = new System.Drawing.Point(17, 308);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(300, 35);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Next @ XX:XX";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblNextAlarm.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.lblNextAlarm.Location = new System.Drawing.Point(17, 308);
+            this.lblNextAlarm.Name = "label1";
+            this.lblNextAlarm.Size = new System.Drawing.Size(300, 35);
+            this.lblNextAlarm.TabIndex = 5;
+            this.lblNextAlarm.Text = "Next @ XX:XX";
+            this.lblNextAlarm.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ClockView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(334, 381);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblNextAlarm);
             this.Controls.Add(this.btnLoad);
             this.Controls.Add(this.btnView);
             this.Controls.Add(this.btnAdd);
@@ -105,7 +105,7 @@
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnView;
         private System.Windows.Forms.Button btnLoad;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblNextAlarm;
     }
 }
 

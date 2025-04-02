@@ -18,7 +18,7 @@ namespace ClockV2.View
             DTPicker.CustomFormat = "dd/MM/yyyy @ hh:mm:ss";
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnFormAddClick(object sender, EventArgs e)
         {
 
         }
