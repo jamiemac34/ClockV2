@@ -42,14 +42,21 @@ namespace ClockV2.View
 
             int comDT = DateTime.Compare(DateTime.Now, selectedDT);
 
+            AlarmTime selectedAT = new AlarmTime(DTPicker.Text.ToString(), selectedDT);
+
             if (comDT >= 1)
             {
                 MessageBox.Show("Alarm cannot be set to a past time", "Alarm Error",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            else if (alarmQueue.Contains(selectedAT))
+            {
+                MessageBox.Show("An alarm is already set to that time", "Alarm Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             else
             {
-                alarmQueue.Add(new AlarmTime(DTPicker.Text.ToString(), selectedDT), (int)epochTime.TotalSeconds);
+                alarmQueue.Add(selectedAT, (int)epochTime.TotalSeconds);
                 this.Close();
             }
 
