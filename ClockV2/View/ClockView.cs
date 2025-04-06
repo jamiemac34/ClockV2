@@ -21,8 +21,7 @@ namespace ClockV2
         private ClockPresenter presenter;
         private readonly ClockDrawingHelper drawingHelper = new ClockDrawingHelper();
         private DateTime currentTime;
-        private ReverseSortedArray<AlarmTime> alarmQueue;
-        private AlarmTime alarmSet;
+        private PriorityQueue<Person> alarmQueue;
 
 
         public ClockView()
@@ -35,7 +34,7 @@ namespace ClockV2
                 .SetValue(Panel_Clock, true, null);
 
             currentTime = DateTime.Now;
-            alarmQueue = new ReverseSortedArray<AlarmTime>(99);
+            alarmQueue = new UnsortedArrayPriorityQueue<Person>(99);
 
         }
 
@@ -61,7 +60,6 @@ namespace ClockV2
         private void btnAdd_Click(object sender, EventArgs e)
         {
             var formPopup = new DialougeAdd(alarmQueue);
-            formPopup.FormClosed += HandleAddFormClose;
             formPopup.Show(this);
         }
 
@@ -72,39 +70,6 @@ namespace ClockV2
 
         private void btnLoad_Click(object sender, EventArgs e)
         {
-
-        }
-
-        public void HandleAddFormClose(object sender, EventArgs e)
-        {
-            updateAlarmDisplay();
-
-        }
-
-        public void updateAlarmDisplay()
-        {
-            if ((alarmQueue.IsEmpty()))
-            {
-                lblNextAlarm.Text = "No alarm set.";
-            }
-            else if (!(alarmQueue.Head() == alarmSet) && !(alarmQueue.IsEmpty()))
-            {
-                alarmSet = alarmQueue.Head();
-                lblNextAlarm.Text = "Next on " + alarmQueue.Head().GetDisplayTime();
-                ScheduleAlarm(alarmQueue.Head());
-            }
-            
-            
-        }
-
-        public async void ScheduleAlarm(AlarmTime alarmTime)
-        {
-            await Task.Delay((int)alarmTime.GetDate().Subtract(DateTime.Now).TotalMilliseconds);
-            alarmQueue.Remove();
-            updateAlarmDisplay();
-            MessageBox.Show("This is a placeholder", "Alarm Trigger",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
-            
 
         }
     }

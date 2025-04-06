@@ -8,21 +8,19 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ClockV2.Alarm;
 using PriorityQueue;
 
 namespace ClockV2.View
 {
     public partial class DialougeAdd : Form
     {
-        private ReverseSortedArray<AlarmTime> alarmQueue;
+        private PriorityQueue<Person> alarmQueue;
 
-        public DialougeAdd(ReverseSortedArray<AlarmTime> alarmQueue)
+        public DialougeAdd(PriorityQueue<Person> alarmQueue)
         {
             InitializeComponent();
             this.alarmQueue = alarmQueue;
-            DTPicker.MinDate = DateTime.Now;
-            DTPicker.CustomFormat = "yyyy/MM/dd @ HH:mm:ss";
+            DTPicker.CustomFormat = "yyyy/MM/dd @ hh:mm:ss";
             
 
         }
@@ -36,34 +34,15 @@ namespace ClockV2.View
             .Select(int.Parse)
             .ToList();
 
-            DateTime selectedDT = new DateTime(timeInt[0], timeInt[1], timeInt[2], timeInt[3], timeInt[4], timeInt[5]);
+            TimeSpan epochTime = new DateTime(timeInt[0], timeInt[1], timeInt[2], timeInt[3], timeInt[4], timeInt[5]) - new DateTime(1970, 1, 1);
 
-            TimeSpan epochTime = selectedDT - new DateTime(1970, 1, 1);
-
-            int comDT = DateTime.Compare(DateTime.Now, selectedDT);
-
-            AlarmTime selectedAT = new AlarmTime(DTPicker.Text.ToString(), selectedDT);
-
-            if (comDT >= 1)
-            {
-                MessageBox.Show("Alarm cannot be set to a past time", "Alarm Error - Invalid Time",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else if (alarmQueue.Contains(selectedAT))
-            {
-                MessageBox.Show("An alarm is already set to that time", "Alarm Error - Already Set",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                alarmQueue.Add(selectedAT, (int)epochTime.TotalSeconds);
-                this.Close();
-            }
-
-
+            alarmQueue.Add(new Person(DTPicker.Text.ToString()), (int)epochTime.TotalSeconds);
 
         }
 
-        
+        private void DialougeAdd_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
