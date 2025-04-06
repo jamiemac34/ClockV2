@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Alarm\AlarmHandler.cs" />
     <Compile Include="Helpers\ClockDrawingHelper.cs" />
     <Compile Include="Presenter\ClockPresenter.cs" />
     <Compile Include="View\ClockView.cs">
@@ -91,6 +92,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\PriorityQueue\PriorityQueue\PriorityQueue.csproj">
+      <Project>{5eec6fd2-5a0f-43d8-8bfd-a30f3da7dffa}</Project>
+      <Name>PriorityQueue</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
