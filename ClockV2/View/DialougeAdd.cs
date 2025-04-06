@@ -21,7 +21,8 @@ namespace ClockV2.View
         {
             InitializeComponent();
             this.alarmQueue = alarmQueue;
-            DTPicker.CustomFormat = "yyyy/MM/dd @ hh:mm:ss";
+            DTPicker.MinDate = DateTime.Now;
+            DTPicker.CustomFormat = "yyyy/MM/dd @ HH:mm:ss";
             
 
         }
@@ -35,11 +36,24 @@ namespace ClockV2.View
             .Select(int.Parse)
             .ToList();
 
-            TimeSpan epochTime = new DateTime(timeInt[0], timeInt[1], timeInt[2], timeInt[3], timeInt[4], timeInt[5]) - new DateTime(1970, 1, 1);
+            DateTime selectedDT = new DateTime(timeInt[0], timeInt[1], timeInt[2], timeInt[3], timeInt[4], timeInt[5]);
 
-            alarmQueue.Add(new Person(DTPicker.Text.ToString()), (int)epochTime.TotalSeconds);
+            TimeSpan epochTime = selectedDT - new DateTime(1970, 1, 1);
 
-            this.Close();
+            int comDT = DateTime.Compare(DateTime.Now, selectedDT);
+
+            if (comDT >= 1)
+            {
+                MessageBox.Show("Alarm cannot be set to a past time", "Alarm Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                alarmQueue.Add(new Person(DTPicker.Text.ToString()), (int)epochTime.TotalSeconds);
+                this.Close();
+            }
+
+
 
         }
 
