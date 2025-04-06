@@ -8,15 +8,16 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ClockV2.Alarm;
 using PriorityQueue;
 
 namespace ClockV2.View
 {
     public partial class DialougeAdd : Form
     {
-        private PriorityQueue<Person> alarmQueue;
+        private ReverseSortedArray<Person> alarmQueue;
 
-        public DialougeAdd(PriorityQueue<Person> alarmQueue)
+        public DialougeAdd(ReverseSortedArray<Person> alarmQueue)
         {
             InitializeComponent();
             this.alarmQueue = alarmQueue;
@@ -38,11 +39,10 @@ namespace ClockV2.View
 
             alarmQueue.Add(new Person(DTPicker.Text.ToString()), (int)epochTime.TotalSeconds);
 
-        }
-
-        private void DialougeAdd_Load(object sender, EventArgs e)
-        {
+            this.Close();
 
         }
+
+        
     }
 }

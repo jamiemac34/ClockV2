@@ -21,7 +21,7 @@ namespace ClockV2
         private ClockPresenter presenter;
         private readonly ClockDrawingHelper drawingHelper = new ClockDrawingHelper();
         private DateTime currentTime;
-        private PriorityQueue<Person> alarmQueue;
+        private ReverseSortedArray<Person> alarmQueue;
 
 
         public ClockView()
@@ -34,7 +34,7 @@ namespace ClockV2
                 .SetValue(Panel_Clock, true, null);
 
             currentTime = DateTime.Now;
-            alarmQueue = new UnsortedArrayPriorityQueue<Person>(99);
+            alarmQueue = new ReverseSortedArray<Person>(99);
 
         }
 
@@ -60,6 +60,7 @@ namespace ClockV2
         private void btnAdd_Click(object sender, EventArgs e)
         {
             var formPopup = new DialougeAdd(alarmQueue);
+            formPopup.FormClosed += updateAlarmDisplay;
             formPopup.Show(this);
         }
 
@@ -71,6 +72,11 @@ namespace ClockV2
         private void btnLoad_Click(object sender, EventArgs e)
         {
 
+        }
+
+        public void updateAlarmDisplay(object sender, EventArgs e)
+        {
+            lblNextAlarm.Text = "Next on " + alarmQueue.Head().ToString();
         }
     }
 }
