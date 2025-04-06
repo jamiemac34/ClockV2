@@ -21,7 +21,8 @@ namespace ClockV2
         private ClockPresenter presenter;
         private readonly ClockDrawingHelper drawingHelper = new ClockDrawingHelper();
         private DateTime currentTime;
-        private ReverseSortedArray<Person> alarmQueue;
+        private ReverseSortedArray<AlarmTime> alarmQueue;
+        private AlarmTime alarmSet;
 
 
         public ClockView()
@@ -34,7 +35,7 @@ namespace ClockV2
                 .SetValue(Panel_Clock, true, null);
 
             currentTime = DateTime.Now;
-            alarmQueue = new ReverseSortedArray<Person>(99);
+            alarmQueue = new ReverseSortedArray<AlarmTime>(99);
 
         }
 
@@ -76,7 +77,21 @@ namespace ClockV2
 
         public void updateAlarmDisplay(object sender, EventArgs e)
         {
-            lblNextAlarm.Text = "Next on " + alarmQueue.Head().ToString();
+            if (!(alarmQueue.Head() == alarmSet)) {
+                alarmSet = alarmQueue.Head();
+                lblNextAlarm.Text = "Next on " + alarmQueue.Head().GetDisplayTime();
+                ScheduleAlarm(alarmQueue.Head());
+            }
+            
+        }
+
+        public async void ScheduleAlarm(AlarmTime alarmTime)
+        {
+            await Task.Delay((int)alarmTime.GetDate().Subtract(DateTime.Now).TotalMilliseconds);
+            MessageBox.Show("This is a test", "Alarm Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+
         }
     }
 }

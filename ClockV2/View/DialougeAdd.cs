@@ -15,9 +15,9 @@ namespace ClockV2.View
 {
     public partial class DialougeAdd : Form
     {
-        private ReverseSortedArray<Person> alarmQueue;
+        private ReverseSortedArray<AlarmTime> alarmQueue;
 
-        public DialougeAdd(ReverseSortedArray<Person> alarmQueue)
+        public DialougeAdd(ReverseSortedArray<AlarmTime> alarmQueue)
         {
             InitializeComponent();
             this.alarmQueue = alarmQueue;
@@ -49,7 +49,7 @@ namespace ClockV2.View
             }
             else
             {
-                alarmQueue.Add(new Person(DTPicker.Text.ToString()), (int)epochTime.TotalSeconds);
+                alarmQueue.Add(new AlarmTime(DTPicker.Text.ToString(), selectedDT), (int)epochTime.TotalSeconds);
                 this.Close();
             }
 
