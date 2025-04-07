@@ -113,8 +113,8 @@ namespace ClockV2.Alarm
 
         public void PopulateList(ListBox lbAlarms)
         {
-            int i = 0; // Start from the first element, the soonest alarm
-            while (i <= tailIndex) // Iterate through the alarms
+            int i = 0;
+            while (i <= tailIndex)
             {
                 lbAlarms.Items.Add(storage[i].Item.ToString());
                 i++;
@@ -129,5 +129,16 @@ namespace ClockV2.Alarm
             }
             tailIndex--;
         }
+
+        public int GetLength()
+        {
+            return tailIndex;
+        }
+
+        public PriorityItem<T> GetEntry(int index)
+        {
+            return storage[index];
+        }
+
     }
 }

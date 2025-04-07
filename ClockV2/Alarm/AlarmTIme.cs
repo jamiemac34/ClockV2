@@ -38,11 +38,13 @@ namespace ClockV2.Alarm
         {
             StringBuilder ical = new StringBuilder();
             ical.AppendLine("BEGIN:VEVENT");
+            ical.AppendLine($"UID:{Guid.NewGuid()}");
             ical.AppendLine($"SUMMARY:{Name}");
             ical.AppendLine($"DESCRIPTION:{Description}");
             ical.AppendLine($"DTSTART:{Date:yyyyMMddTHHmmssZ}");
             ical.AppendLine($"DTSTAMP:{DateTime.Now:yyyyMMddTHHmmssZ}");
             ical.AppendLine("BEGIN:VALARM");
+            ical.AppendLine("ACTION:DISPLAY");
             ical.AppendLine($"TRIGGER:{(TriggerTime < TimeSpan.Zero ? "-" : "+")}{Math.Abs(TriggerTime.TotalMinutes)}M");
             ical.AppendLine($"DESCRIPTION:{Description} Alarm Trigger");
             ical.AppendLine($"SUMMARY:{Name} Alarm Trigger");
