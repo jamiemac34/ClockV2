@@ -120,5 +120,14 @@ namespace ClockV2.Alarm
                 i--;
             }
         }
+
+        public void removeViaIndex(int index)
+        {
+            for (int i = index; i < tailIndex; i++)
+            {
+                storage[i] = storage[i + 1];
+            }
+            tailIndex--;
+        }
     }
 }

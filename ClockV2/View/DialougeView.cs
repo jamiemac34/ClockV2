@@ -18,6 +18,7 @@ namespace ClockV2.View
         public DialougeView(ReverseSortedArray<AlarmTime> alarmQueue)
         {
             InitializeComponent();
+            this.alarmQueue = alarmQueue;
             alarmQueue.populateList(lbAlarms);
         }
 
@@ -27,5 +28,25 @@ namespace ClockV2.View
             MessageBox.Show(lbAlarms.GetItemText(lbAlarms.SelectedIndex), "Alarm Trigger",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            alarmQueue.removeViaIndex(lbAlarms.SelectedIndex);
+            lbAlarms.Items.RemoveAt(lbAlarms.SelectedIndex);
+        }
+
+        private void lbAlarms_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(lbAlarms.SelectedIndex > -1)
+            {
+                btnRemove.Enabled = true;
+            }
+            else
+            {
+                btnRemove.Enabled = false;
+            }
+        }
+
+       
     }
 }

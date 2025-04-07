@@ -30,7 +30,7 @@
         {
             this.btnSave = new System.Windows.Forms.Button();
             this.lbAlarms = new System.Windows.Forms.ListBox();
-            this.Remove = new System.Windows.Forms.Button();
+            this.btnRemove = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnSave
@@ -50,22 +50,25 @@
             this.lbAlarms.Name = "lbAlarms";
             this.lbAlarms.Size = new System.Drawing.Size(244, 147);
             this.lbAlarms.TabIndex = 2;
+            this.lbAlarms.SelectedIndexChanged += new System.EventHandler(this.lbAlarms_SelectedIndexChanged);
             // 
-            // Remove
+            // btnRemove
             // 
-            this.Remove.Location = new System.Drawing.Point(262, 136);
-            this.Remove.Name = "Remove";
-            this.Remove.Size = new System.Drawing.Size(88, 23);
-            this.Remove.TabIndex = 4;
-            this.Remove.Text = "Remove";
-            this.Remove.UseVisualStyleBackColor = true;
+            this.btnRemove.Enabled = false;
+            this.btnRemove.Location = new System.Drawing.Point(262, 136);
+            this.btnRemove.Name = "btnRemove";
+            this.btnRemove.Size = new System.Drawing.Size(88, 23);
+            this.btnRemove.TabIndex = 4;
+            this.btnRemove.Text = "Remove";
+            this.btnRemove.UseVisualStyleBackColor = true;
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             // 
             // DialougeView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(365, 172);
-            this.Controls.Add(this.Remove);
+            this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.lbAlarms);
             this.Controls.Add(this.btnSave);
             this.Name = "DialougeView";
@@ -78,6 +81,6 @@
 
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.ListBox lbAlarms;
-        private System.Windows.Forms.Button Remove;
+        private System.Windows.Forms.Button btnRemove;
     }
 }
