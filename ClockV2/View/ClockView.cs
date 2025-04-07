@@ -61,7 +61,7 @@ namespace ClockV2
         private void btnAdd_Click(object sender, EventArgs e)
         {
             var formPopup = new DialougeAdd(alarmQueue);
-            formPopup.FormClosed += updateAlarmDisplay;
+            formPopup.FormClosed += HandleAddFormClose;
             formPopup.Show(this);
         }
 
@@ -75,22 +75,36 @@ namespace ClockV2
 
         }
 
-        public void updateAlarmDisplay(object sender, EventArgs e)
+        public void HandleAddFormClose(object sender, EventArgs e)
         {
-            if (!(alarmQueue.Head() == alarmSet)) {
+            updateAlarmDisplay();
+
+        }
+
+        public void updateAlarmDisplay()
+        {
+            if ((alarmQueue.IsEmpty()))
+            {
+                lblNextAlarm.Text = "No alarm set.";
+            }
+            else if (!(alarmQueue.Head() == alarmSet) && !(alarmQueue.IsEmpty()))
+            {
                 alarmSet = alarmQueue.Head();
                 lblNextAlarm.Text = "Next on " + alarmQueue.Head().GetDisplayTime();
                 ScheduleAlarm(alarmQueue.Head());
             }
+            
             
         }
 
         public async void ScheduleAlarm(AlarmTime alarmTime)
         {
             await Task.Delay((int)alarmTime.GetDate().Subtract(DateTime.Now).TotalMilliseconds);
-            MessageBox.Show("This is a test", "Alarm Error",
+            alarmQueue.Remove();
+            updateAlarmDisplay();
+            MessageBox.Show("This is a placeholder", "Alarm Trigger",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+            
 
         }
     }

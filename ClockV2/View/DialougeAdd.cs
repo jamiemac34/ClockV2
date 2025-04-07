@@ -46,12 +46,12 @@ namespace ClockV2.View
 
             if (comDT >= 1)
             {
-                MessageBox.Show("Alarm cannot be set to a past time", "Alarm Error",
+                MessageBox.Show("Alarm cannot be set to a past time", "Alarm Error - Invalid Time",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else if (alarmQueue.Contains(selectedAT))
             {
-                MessageBox.Show("An alarm is already set to that time", "Alarm Error",
+                MessageBox.Show("An alarm is already set to that time", "Alarm Error - Already Set",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
