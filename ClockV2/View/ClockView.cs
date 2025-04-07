@@ -69,7 +69,7 @@ namespace ClockV2
 
         private void btnView_Click(object sender, EventArgs e)
         {
-            var formPopup = new DialougeView(alarmQueue, () => alarmTokenSource?.Cancel());
+            var formPopup = new DialougeView(alarmQueue, () => alarmTokenSource?.Cancel(), updateAlarmDisplay);
             formPopup.FormClosed += HandleAddFormClose;
             formPopup.Show(this);
         }
@@ -122,6 +122,7 @@ namespace ClockV2
             }
             catch (TaskCanceledException)
             {
+
             }
 
         }

@@ -113,11 +113,11 @@ namespace ClockV2.Alarm
 
         public void populateList(ListBox lbAlarms)
         {
-            int i = tailIndex;
-            while (i >= 0)
+            int i = 0; // Start from the first element, the soonest alarm
+            while (i <= tailIndex) // Iterate through the alarms
             {
                 lbAlarms.Items.Add(storage[i].Item.ToString());
-                i--;
+                i++;
             }
         }
 
