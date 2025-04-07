@@ -28,7 +28,7 @@ namespace ClockV2.View
 
         }
 
-        private void btnFormAddClick(object sender, EventArgs e)
+        private void BtnFormAddClick(object sender, EventArgs e)
         {
             // taken from https://stackoverflow.com/questions/911717/split-string-convert-tolistint-in-one-line
             var timeInt = DTPicker.Text.Replace(" @ ", "/").Replace(":", "/")

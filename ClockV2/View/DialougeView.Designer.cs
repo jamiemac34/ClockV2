@@ -41,7 +41,7 @@
             this.btnSave.TabIndex = 1;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            this.btnSave.Click += new System.EventHandler(this.BtnSaveClick);
             // 
             // lbAlarms
             // 
@@ -50,7 +50,7 @@
             this.lbAlarms.Name = "lbAlarms";
             this.lbAlarms.Size = new System.Drawing.Size(244, 147);
             this.lbAlarms.TabIndex = 2;
-            this.lbAlarms.SelectedIndexChanged += new System.EventHandler(this.lbAlarms_SelectedIndexChanged);
+            this.lbAlarms.SelectedIndexChanged += new System.EventHandler(this.LBAlarmsSelectedIndexChanged);
             // 
             // btnRemove
             // 
@@ -61,7 +61,7 @@
             this.btnRemove.TabIndex = 4;
             this.btnRemove.Text = "Remove";
             this.btnRemove.UseVisualStyleBackColor = true;
-            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
+            this.btnRemove.Click += new System.EventHandler(this.BtnRemoveClick);
             // 
             // DialougeView
             // 

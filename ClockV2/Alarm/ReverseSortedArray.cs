@@ -111,7 +111,7 @@ namespace ClockV2.Alarm
             return false;
         }
 
-        public void populateList(ListBox lbAlarms)
+        public void PopulateList(ListBox lbAlarms)
         {
             int i = 0; // Start from the first element, the soonest alarm
             while (i <= tailIndex) // Iterate through the alarms
@@ -121,7 +121,7 @@ namespace ClockV2.Alarm
             }
         }
 
-        public void removeViaIndex(int index)
+        public void RemoveViaIndex(int index)
         {
             for (int i = index; i < tailIndex; i++)
             {

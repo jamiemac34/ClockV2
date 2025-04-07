@@ -23,30 +23,30 @@ namespace ClockV2.View
             this.alarmQueue = alarmQueue;
             this.cancelAlarmCallback = cancelAlarmCallback;
             this.updateAlarmDisplayCallback = updateAlarmDisplayCallback;
-            alarmQueue.populateList(lbAlarms);
+            alarmQueue.PopulateList(lbAlarms);
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private void BtnSaveClick(object sender, EventArgs e)
         {
             
             MessageBox.Show(lbAlarms.GetItemText(lbAlarms.SelectedIndex), "Alarm Trigger",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void btnRemove_Click(object sender, EventArgs e)
+        private void BtnRemoveClick(object sender, EventArgs e)
         {
             if (lbAlarms.SelectedIndex == 0)
             {
                 cancelAlarmCallback?.Invoke();
                 
             }
-            alarmQueue.removeViaIndex(lbAlarms.SelectedIndex);
+            alarmQueue.RemoveViaIndex(lbAlarms.SelectedIndex);
             lbAlarms.Items.RemoveAt(lbAlarms.SelectedIndex);
             updateAlarmDisplayCallback.Invoke();
 
         }
 
-        private void lbAlarms_SelectedIndexChanged(object sender, EventArgs e)
+        private void LBAlarmsSelectedIndexChanged(object sender, EventArgs e)
         {
             if(lbAlarms.SelectedIndex > -1)
             {

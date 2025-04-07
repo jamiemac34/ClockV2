@@ -50,7 +50,7 @@
             this.btnFormAdd.TabIndex = 1;
             this.btnFormAdd.Text = "Add";
             this.btnFormAdd.UseVisualStyleBackColor = true;
-            this.btnFormAdd.Click += new System.EventHandler(this.btnFormAddClick);
+            this.btnFormAdd.Click += new System.EventHandler(this.BtnFormAddClick);
             // 
             // lblAddText
             // 
