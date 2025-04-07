@@ -67,7 +67,9 @@ namespace ClockV2
 
         private void btnView_Click(object sender, EventArgs e)
         {
-
+            var formPopup = new DialougeView(alarmQueue);
+            formPopup.FormClosed += HandleAddFormClose;
+            formPopup.Show(this);
         }
 
         private void btnLoad_Click(object sender, EventArgs e)
@@ -90,7 +92,7 @@ namespace ClockV2
             else if (!(alarmQueue.Head() == alarmSet) && !(alarmQueue.IsEmpty()))
             {
                 alarmSet = alarmQueue.Head();
-                lblNextAlarm.Text = "Next on " + alarmQueue.Head().GetDisplayTime();
+                lblNextAlarm.Text = "Next on " + alarmQueue.Head().ToString();
                 ScheduleAlarm(alarmQueue.Head());
             }
             

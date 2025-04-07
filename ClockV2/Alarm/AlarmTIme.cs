@@ -17,7 +17,7 @@ namespace ClockV2.Alarm
             Date = date;
         }
 
-        public string GetDisplayTime()
+        public override string ToString()
         {
             return DisplayTime;
         }

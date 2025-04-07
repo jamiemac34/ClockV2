@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using PriorityQueue;
 
 namespace ClockV2.Alarm
@@ -108,6 +109,16 @@ namespace ClockV2.Alarm
                 
             }
             return false;
+        }
+
+        public void populateList(ListBox lbAlarms)
+        {
+            int i = tailIndex;
+            while (i >= 0)
+            {
+                lbAlarms.Items.Add(storage[i].Item.ToString());
+                i--;
+            }
         }
     }
 }

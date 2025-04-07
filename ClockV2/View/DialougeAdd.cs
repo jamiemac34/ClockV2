@@ -22,6 +22,7 @@ namespace ClockV2.View
             InitializeComponent();
             this.alarmQueue = alarmQueue;
             DTPicker.MinDate = DateTime.Now;
+            DTPicker.MaxDate = DateTime.Now.AddDays(21);
             DTPicker.CustomFormat = "yyyy/MM/dd @ HH:mm:ss";
             
 
