@@ -14,11 +14,14 @@ namespace ClockV2.View
     public partial class DialougeView : Form
     {
         private ReverseSortedArray<AlarmTime> alarmQueue;
+        private Action cancelAlarmCallback;
 
-        public DialougeView(ReverseSortedArray<AlarmTime> alarmQueue)
+        public DialougeView(ReverseSortedArray<AlarmTime> alarmQueue, Action cancelAlarmCallback)
         {
             InitializeComponent();
             this.alarmQueue = alarmQueue;
+            this.cancelAlarmCallback = cancelAlarmCallback;
+
             alarmQueue.populateList(lbAlarms);
         }
 
@@ -31,8 +34,13 @@ namespace ClockV2.View
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
+            if (lbAlarms.SelectedIndex == 0)
+            {
+                cancelAlarmCallback?.Invoke();
+            }
             alarmQueue.removeViaIndex(lbAlarms.SelectedIndex);
             lbAlarms.Items.RemoveAt(lbAlarms.SelectedIndex);
+            
         }
 
         private void lbAlarms_SelectedIndexChanged(object sender, EventArgs e)

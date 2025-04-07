@@ -13,6 +13,7 @@ using ClockV2.View;
 using ClockV2.Alarm;
 using PriorityQueue;
 using System.Collections;
+using System.Threading;
 
 namespace ClockV2
 {
@@ -23,6 +24,7 @@ namespace ClockV2
         private DateTime currentTime;
         private ReverseSortedArray<AlarmTime> alarmQueue;
         private AlarmTime alarmSet;
+        private CancellationTokenSource alarmTokenSource;
 
 
         public ClockView()
@@ -67,7 +69,7 @@ namespace ClockV2
 
         private void btnView_Click(object sender, EventArgs e)
         {
-            var formPopup = new DialougeView(alarmQueue);
+            var formPopup = new DialougeView(alarmQueue, () => alarmTokenSource?.Cancel());
             formPopup.FormClosed += HandleAddFormClose;
             formPopup.Show(this);
         }
@@ -101,12 +103,26 @@ namespace ClockV2
 
         public async void ScheduleAlarm(AlarmTime alarmTime)
         {
-            await Task.Delay((int)alarmTime.GetDate().Subtract(DateTime.Now).TotalMilliseconds);
-            alarmQueue.Remove();
-            updateAlarmDisplay();
-            MessageBox.Show("This is a placeholder", "Alarm Trigger",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
-            
+
+            alarmTokenSource?.Cancel();
+            alarmTokenSource = new CancellationTokenSource();
+
+            try
+            {
+
+                await Task.Delay((int)alarmTime.GetDate().Subtract(DateTime.Now).TotalMilliseconds, alarmTokenSource.Token);
+                if (alarmTokenSource.IsCancellationRequested)
+                {
+                    return;
+                }
+                alarmQueue.Remove();
+                updateAlarmDisplay();
+                MessageBox.Show("This is a placeholder", "Alarm Trigger",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (TaskCanceledException)
+            {
+            }
 
         }
     }
