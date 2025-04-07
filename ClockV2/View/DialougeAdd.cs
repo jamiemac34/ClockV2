@@ -24,7 +24,27 @@ namespace ClockV2.View
             DTPicker.MinDate = DateTime.Now;
             DTPicker.MaxDate = DateTime.Now.AddDays(21);
             DTPicker.CustomFormat = "yyyy/MM/dd @ HH:mm:ss";
-            
+
+            CBTriggerTime.Items.AddRange(new object[]
+            {
+                "At time of event",
+                "5 minutes before",
+                "10 minutes before",
+                "15 minutes before",
+                "30 minutes before",
+                "1 hour before",
+                "2 hours before",
+                "6 hours before",
+                "12 hours before",
+                "1 day before",
+                "2 days before",
+                "3 days before",
+                "1 week before"
+            });
+            CBTriggerTime.SelectedIndex = 0;
+
+            ToolTip triggerToolTip = new ToolTip();
+            triggerToolTip.SetToolTip(CBTriggerTime, "Sets how long before the event the alarm will trigger.");
 
         }
 
@@ -49,11 +69,18 @@ namespace ClockV2.View
             {
                 MessageBox.Show("Alarm cannot be set to a past time", "Alarm Error - Invalid Time",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
             else if (alarmQueue.Contains(selectedAT))
             {
                 MessageBox.Show("An alarm is already set to that time", "Alarm Error - Already Set",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            else if (txtName.Text == "Enter alarm name..." || txtDescription.Text == "Enter alarm description...")
+            {
+                MessageBox.Show("The name and description cannot be left blank.", "Alarm Error - Missing Name/Description", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
             else
             {
@@ -65,6 +92,65 @@ namespace ClockV2.View
 
         }
 
-        
+        private void SetPlaceholderText(object sender, EventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox != null && string.IsNullOrEmpty(textBox.Text))
+            {
+                if (textBox.Name == "txtName")
+                {
+                    textBox.Text = "Enter alarm name...";
+                }
+                else if (textBox.Name == "txtDescription")
+                {
+                    textBox.Text = "Enter alarm description...";
+                }
+                textBox.ForeColor = Color.Gray;
+
+            }
+        }
+
+        private void RemovePlaceholderText(object sender, EventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox != null && textBox.ForeColor == Color.Gray)
+            {
+                textBox.Text = "";
+                textBox.ForeColor = Color.Black;
+            }
+        }
+
+        private void TxtNameFocusGot(object sender, EventArgs e)
+        {
+            RemovePlaceholderText(sender, e);
+        }
+
+        private void TxtDescriptionFocusGot(object sender, EventArgs e)
+        {
+            RemovePlaceholderText(sender, e);
+        }
+
+        private void TxtNameFocusLost(object sender, EventArgs e)
+        {
+            SetPlaceholderText(sender, e);
+        }
+
+        private void TxtDescriptionFocusLost(object sender, EventArgs e)
+        {
+            SetPlaceholderText(sender, e);
+        }
+
+
+        private void FormLoad(object sender, EventArgs e)
+        {
+            SetPlaceholderText(txtName, e);
+            SetPlaceholderText(txtDescription, e);
+        }
+
+
+
+
     }
 }
