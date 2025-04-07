@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace ClockV2.Alarm
 {
@@ -10,11 +11,17 @@ namespace ClockV2.Alarm
     {
         public string DisplayTime { get; }
         public DateTime Date { get; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public TimeSpan TriggerTime { get; set; }
 
-        public AlarmTime(string displayTime, DateTime date)
+        public AlarmTime(string displayTime, DateTime date, TimeSpan triggerTime, string name, string description)
         {
             DisplayTime = displayTime;
             Date = date;
+            Name = name;
+            Description = description;
+            TriggerTime = triggerTime;
         }
 
         public override string ToString()
@@ -25,6 +32,24 @@ namespace ClockV2.Alarm
         public DateTime GetDate()
         {
             return Date;
+        }
+
+        public string ToCalanderEvent()
+        {
+            StringBuilder ical = new StringBuilder();
+            ical.AppendLine("BEGIN:VEVENT");
+            ical.AppendLine($"SUMMARY:{Name}");
+            ical.AppendLine($"DESCRIPTION:{Description}");
+            ical.AppendLine($"DTSTART:{Date:yyyyMMddTHHmmssZ}");
+            ical.AppendLine($"DTSTAMP:{DateTime.Now:yyyyMMddTHHmmssZ}");
+            ical.AppendLine("BEGIN:VALARM");
+            ical.AppendLine($"TRIGGER:{(TriggerTime < TimeSpan.Zero ? "-" : "+")}{Math.Abs(TriggerTime.TotalMinutes)}M");
+            ical.AppendLine($"DESCRIPTION:{Description} Alarm Trigger");
+            ical.AppendLine($"SUMMARY:{Name} Alarm Trigger");
+            ical.AppendLine("END:VALARM");
+            ical.AppendLine("END:VEVENT");
+            return ical.ToString();
+
         }
 
         public override bool Equals(object obj)

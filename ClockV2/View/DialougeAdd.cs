@@ -63,7 +63,51 @@ namespace ClockV2.View
 
             int comDT = DateTime.Compare(DateTime.Now, selectedDT);
 
-            AlarmTime selectedAT = new AlarmTime(DTPicker.Text.ToString(), selectedDT);
+            TimeSpan triggerTime = TimeSpan.Zero;
+            switch (CBTriggerTime.SelectedIndex)
+            {
+                case 0:
+                    triggerTime = TimeSpan.Zero;
+                    break;
+                case 1:
+                    triggerTime = TimeSpan.FromMinutes(-5);
+                    break;
+                case 2:
+                    triggerTime = TimeSpan.FromMinutes(-10);
+                    break;
+                case 3:
+                    triggerTime = TimeSpan.FromMinutes(-15);
+                    break;
+                case 4:
+                    triggerTime = TimeSpan.FromMinutes(-30);
+                    break;
+                case 5:
+                    triggerTime = TimeSpan.FromHours(-1);
+                    break;
+                case 6:
+                    triggerTime = TimeSpan.FromHours(-2);
+                    break;
+                case 7:
+                    triggerTime = TimeSpan.FromHours(-6);
+                    break;
+                case 8:
+                    triggerTime = TimeSpan.FromHours(-12);
+                    break;
+                case 9:
+                    triggerTime = TimeSpan.FromDays(-1);
+                    break;
+                case 10:
+                    triggerTime = TimeSpan.FromDays(-2);
+                    break;
+                case 11:
+                    triggerTime = TimeSpan.FromDays(-3);
+                    break;
+                case 12:
+                    triggerTime = TimeSpan.FromDays(-7);
+                    break;
+            }
+
+            AlarmTime selectedAT = new AlarmTime(DTPicker.Text.ToString(), selectedDT, triggerTime, txtName.Text, txtDescription.Text);
 
             if (comDT >= 1)
             {
