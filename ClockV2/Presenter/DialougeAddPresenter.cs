@@ -21,10 +21,10 @@ namespace ClockV2.Presenter
             this.alarmQueue = alarmQueue;
         }
 
-        public void OnBtnFormAddClick(DateTime selectedDT, int selectedTriggerIndex, string name, string description)
+        public void OnBtnFormAddClick(string displayTime, DateTime selectedDT, int selectedTriggerIndex, string name, string description)
         {
             TimeSpan triggerTime = GetTriggerTimeFromSelection(selectedTriggerIndex);
-            AlarmTime selectedAT = new AlarmTime(selectedDT.ToString(), selectedDT, triggerTime, name, description);
+            AlarmTime selectedAT = new AlarmTime(displayTime, selectedDT, triggerTime, name, description, "", null);
 
             if (DateTime.Compare(DateTime.Now, selectedDT) >= 1)
             {

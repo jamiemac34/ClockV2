@@ -146,7 +146,7 @@ namespace ClockV2
 
         private void BtnLoadClick(object sender, EventArgs e)
         {
-
+            presenter.OnBtnLoadClick();
         }
 
         public void HandleAddFormClose(object sender, EventArgs e)

@@ -63,6 +63,18 @@ namespace ClockV2.Alarm
             tailIndex--;
         }
 
+        public void Clear()
+        {
+            if (!IsEmpty())
+            {
+                for (int i = 0; i <= tailIndex; i++)
+                {
+                    storage[i] = default;
+                }
+                tailIndex = -1;
+            }
+        }
+
         public bool IsEmpty()
         {
             return tailIndex < 0;

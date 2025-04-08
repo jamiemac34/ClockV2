@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -14,14 +15,23 @@ namespace ClockV2.Alarm
         public string Name { get; set; }
         public string Description { get; set; }
         public TimeSpan TriggerTime { get; set; }
+        public String Uid { get; set; }
+        public DateTime SetDate { get; }
 
-        public AlarmTime(string displayTime, DateTime date, TimeSpan triggerTime, string name, string description)
+        public AlarmTime(string displayTime, DateTime date, TimeSpan triggerTime, string name, string description, string uid, object setDate)
         {
             DisplayTime = displayTime;
             Date = date;
             Name = name;
             Description = description;
             TriggerTime = triggerTime;
+            Uid = uid;
+            if (setDate != null)
+            {
+                SetDate = (DateTime)setDate;
+
+            }
+
         }
 
         public override string ToString()
@@ -38,11 +48,26 @@ namespace ClockV2.Alarm
         {
             StringBuilder ical = new StringBuilder();
             ical.AppendLine("BEGIN:VEVENT");
-            ical.AppendLine($"UID:{Guid.NewGuid()}");
+            if (Uid != "")
+            {
+                ical.AppendLine($"UID:{Uid}");
+            }
+            else
+            {
+                ical.AppendLine($"UID:{Guid.NewGuid()}");
+
+            }
             ical.AppendLine($"SUMMARY:{Name}");
             ical.AppendLine($"DESCRIPTION:{Description}");
             ical.AppendLine($"DTSTART:{Date:yyyyMMddTHHmmssZ}");
-            ical.AppendLine($"DTSTAMP:{DateTime.Now:yyyyMMddTHHmmssZ}");
+            if (SetDate != DateTime.MinValue)
+            {
+                ical.AppendLine($"DTSTAMP:{SetDate:yyyyMMddTHHmmssZ}");
+            }
+            else
+            {
+                ical.AppendLine($"DTSTAMP:{DateTime.Now:yyyyMMddTHHmmssZ}");
+            }
             ical.AppendLine("BEGIN:VALARM");
             ical.AppendLine("ACTION:DISPLAY");
             ical.AppendLine($"TRIGGER:{(TriggerTime < TimeSpan.Zero ? "-" : "+")}{Math.Abs(TriggerTime.TotalMinutes)}M");

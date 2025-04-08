@@ -64,7 +64,7 @@ namespace ClockV2.View
 
         private void BtnFormAddClick(object sender, EventArgs e)
         {
-            presenter.OnBtnFormAddClick(DTPicker.Value, CBTriggerTime.SelectedIndex, txtName.Text, txtDescription.Text);
+            presenter.OnBtnFormAddClick(DTPicker.Text, DTPicker.Value, CBTriggerTime.SelectedIndex, txtName.Text, txtDescription.Text);
         }
 
         private void SetPlaceholderText(object sender, EventArgs e)
