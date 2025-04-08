@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ClockView));
             this.Panel_Clock = new System.Windows.Forms.Panel();
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnView = new System.Windows.Forms.Button();
@@ -93,8 +94,9 @@
             this.Controls.Add(this.btnView);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.Panel_Clock);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ClockView";
-            this.Text = "Form1";
+            this.Text = "ClockV2 - QuietClock";
             this.Load += new System.EventHandler(this.ClockView_Load);
             this.ResumeLayout(false);
 

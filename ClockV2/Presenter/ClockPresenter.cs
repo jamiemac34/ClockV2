@@ -72,7 +72,7 @@ namespace ClockV2.Presenter
             else
             {
                 var nextAlarm = alarmQueue.Head();
-                view.UpdateAlarmDisplay($"Next on {nextAlarm.ToString()}");
+                view.UpdateAlarmDisplay($"Next on {nextAlarm.GetDT()}");
                 ScheduleAlarm(nextAlarm);
             }
         }
@@ -96,7 +96,7 @@ namespace ClockV2.Presenter
                     UpdateAlarmDisplay();
 
                     string alarmMessage = $"Alarm triggered at {alarmTime.GetDate():HH:mm:ss}";
-                    view.STNotification("Alarm Triggered", alarmMessage);
+                    view.STNotification(alarmTime.GetName(), alarmTime.GetDescription());
                 }
                 catch (TaskCanceledException)
                 {
@@ -151,7 +151,14 @@ namespace ClockV2.Presenter
                 else if (line.StartsWith("END:VEVENT") && collecting)
                 {
                     collecting = false;
-                    string displayTime = fileDT.ToString("g");
+
+                    if (fileDT <= DateTime.Now)
+                    {
+                        Console.WriteLine($"Skipping expired alarm: {name} at {fileDT}");
+                        continue;
+                    }
+
+                    string displayTime = fileDT.ToString("yyyy/MM/dd @ HH:mm:ss");
                     var fileAT = new AlarmTime(displayTime, fileDT, triggerTime, name, description, uid, setDate);
                     alarmQueue.Add(fileAT, (int)(fileDT - new DateTime(1970, 1, 1)).TotalSeconds);
 
@@ -180,8 +187,9 @@ namespace ClockV2.Presenter
                     }
                 }
 
-                UpdateAlarmDisplay();
+                
             }
+            UpdateAlarmDisplay();
         }
         public void OnSaveAlarms()
         {

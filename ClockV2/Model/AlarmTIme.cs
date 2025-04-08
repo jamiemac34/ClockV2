@@ -10,13 +10,13 @@ namespace ClockV2.Alarm
 {
     public class AlarmTime
     {
-        public string DisplayTime { get; }
-        public DateTime Date { get; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public TimeSpan TriggerTime { get; set; }
-        public String Uid { get; set; }
-        public DateTime SetDate { get; }
+        private string DisplayTime { get; }
+        private DateTime Date { get; }
+        private string Name { get; set; }
+        private string Description { get; set; }
+        private TimeSpan TriggerTime { get; set; }
+        private String Uid { get; set; }
+        private DateTime SetDate { get; }
 
         public AlarmTime(string displayTime, DateTime date, TimeSpan triggerTime, string name, string description, string uid, object setDate)
         {
@@ -36,7 +36,22 @@ namespace ClockV2.Alarm
 
         public override string ToString()
         {
+            return Name + ": " + DisplayTime;
+        }
+
+        public string GetDT()
+        {
             return DisplayTime;
+        }
+
+        public string GetName()
+        {
+            return Name;
+        }
+
+        public string GetDescription()
+        {
+            return Description;
         }
 
         public DateTime GetDate()

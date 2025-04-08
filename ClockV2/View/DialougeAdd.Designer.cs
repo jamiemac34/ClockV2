@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DialougeAdd));
             this.DTPicker = new System.Windows.Forms.DateTimePicker();
             this.btnFormAdd = new System.Windows.Forms.Button();
             this.lblAddText = new System.Windows.Forms.Label();
@@ -102,8 +103,9 @@
             this.Controls.Add(this.lblAddText);
             this.Controls.Add(this.btnFormAdd);
             this.Controls.Add(this.DTPicker);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "DialougeAdd";
-            this.Text = "Form1";
+            this.Text = "Add Alarm";
             this.Activated += new System.EventHandler(this.FormLoad);
             this.ResumeLayout(false);
             this.PerformLayout();

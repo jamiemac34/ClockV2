@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DialougeView));
             this.btnSave = new System.Windows.Forms.Button();
             this.lbAlarms = new System.Windows.Forms.ListBox();
             this.btnRemove = new System.Windows.Forms.Button();
@@ -71,8 +72,9 @@
             this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.lbAlarms);
             this.Controls.Add(this.btnSave);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "DialougeView";
-            this.Text = "DialougeView";
+            this.Text = "Alarm View";
             this.ResumeLayout(false);
 
         }
