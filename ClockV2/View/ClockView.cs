@@ -13,6 +13,8 @@ using ClockV2.View;
 using ClockV2.Alarm;
 using PriorityQueue;
 using System.Collections;
+using System.Threading;
+using System.Media;
 
 namespace ClockV2
 {
@@ -23,6 +25,9 @@ namespace ClockV2
         private DateTime currentTime;
         private ReverseSortedArray<AlarmTime> alarmQueue;
         private AlarmTime alarmSet;
+        private CancellationTokenSource alarmTokenSource;
+        private NotifyIcon systemTray;
+
 
 
         public ClockView()
@@ -35,13 +40,68 @@ namespace ClockV2
                 .SetValue(Panel_Clock, true, null);
 
             currentTime = DateTime.Now;
-            alarmQueue = new ReverseSortedArray<AlarmTime>(99);
 
+            systemTray = new NotifyIcon
+            {
+                Icon = this.Icon,
+                Visible = true,
+                Text = "ClockV2"
+            };
+
+            var trayMenu = new ContextMenuStrip();
+            trayMenu.Items.Add("Show Clock", null, STMenuShowClick);
+            trayMenu.Items.Add("Add Alarm", null, BtnAddClick);
+            trayMenu.Items.Add("View Alarms", null, BtnViewClick);
+            trayMenu.Items.Add("Save Alarms", null, BtnSaveClick);
+            trayMenu.Items.Add("Load Alarms", null, BtnLoadClick);
+            trayMenu.Items.Add("Exit", null, STMenuExitClick);
+
+            systemTray.ContextMenuStrip = trayMenu;
+
+            this.FormClosing += (s, e) =>
+            {
+                if (e.CloseReason == CloseReason.UserClosing)
+                {
+                    if (this.WindowState == FormWindowState.Normal)
+                    {
+                        presenter.OnExit();
+                        Application.Exit();
+                    }
+                    else
+                    {
+                        e.Cancel = true;
+                        this.WindowState = FormWindowState.Minimized;
+                        this.ShowInTaskbar = false;
+                        this.Hide();
+                    }
+                }
+            };
+
+            systemTray.DoubleClick += (s, e) =>
+            {
+                this.ShowInTaskbar = true;
+                this.Show();
+                this.WindowState = FormWindowState.Normal;
+            };
+
+            this.Resize += (s, e) =>
+            {
+                if (this.WindowState == FormWindowState.Minimized)
+                {
+                    this.Hide();
+                    this.ShowInTaskbar = false;
+                }
+            };
         }
 
         public void SetPresenter(ClockPresenter presenter)
         {
             this.presenter = presenter;
+        }
+
+        public void UpdateAlarmDisplay(string alarmMessage)
+        {
+            lblNextAlarm.Text = alarmMessage;
         }
 
         public void UpdateClock(DateTime currentTime)
@@ -58,54 +118,60 @@ namespace ClockV2
             drawingHelper.DrawClock(g, currentTime, Panel_Clock.Width, Panel_Clock.Height);
         }
 
-        private void btnAdd_Click(object sender, EventArgs e)
+        private void STMenuShowClick(object sender, EventArgs e)
         {
-            var formPopup = new DialougeAdd(alarmQueue);
-            formPopup.FormClosed += HandleAddFormClose;
-            formPopup.Show(this);
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+            this.ShowInTaskbar = true;
         }
 
-        private void btnView_Click(object sender, EventArgs e)
+        private void STMenuExitClick(object sender, EventArgs e)
         {
+            presenter.OnExit();
+            Application.Exit();
+        }
+
+        public void STNotification(string title, string message)
+        {
+            systemTray.ShowBalloonTip(3000, title, message, ToolTipIcon.Info);
+        }
+
+        
+        private void BtnAddClick(object sender, EventArgs e)
+        {
+            presenter.OnBtnAddClick();
 
         }
 
-        private void btnLoad_Click(object sender, EventArgs e)
+        private void BtnViewClick(object sender, EventArgs e)
         {
+            presenter.OnBtnViewClick();
+        }
 
+        private void BtnLoadClick(object sender, EventArgs e)
+        {
+            presenter.OnBtnLoadClick();
         }
 
         public void HandleAddFormClose(object sender, EventArgs e)
         {
-            updateAlarmDisplay();
+            presenter.UpdateAlarmDisplay();
 
         }
 
-        public void updateAlarmDisplay()
+        private void ClockView_Load(object sender, EventArgs e)
         {
-            if ((alarmQueue.IsEmpty()))
-            {
-                lblNextAlarm.Text = "No alarm set.";
-            }
-            else if (!(alarmQueue.Head() == alarmSet) && !(alarmQueue.IsEmpty()))
-            {
-                alarmSet = alarmQueue.Head();
-                lblNextAlarm.Text = "Next on " + alarmQueue.Head().GetDisplayTime();
-                ScheduleAlarm(alarmQueue.Head());
-            }
-            
-            
+            presenter.OnBtnLoadClick();
         }
 
-        public async void ScheduleAlarm(AlarmTime alarmTime)
+        private void BtnSaveClick(object sender, EventArgs e)
         {
-            await Task.Delay((int)alarmTime.GetDate().Subtract(DateTime.Now).TotalMilliseconds);
-            alarmQueue.Remove();
-            updateAlarmDisplay();
-            MessageBox.Show("This is a placeholder", "Alarm Trigger",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
-            
+            presenter.OnSaveAlarms();
+        }
 
+        public void ShowMessage(string message, string title, MessageBoxIcon icon)
+        {
+            MessageBox.Show(message, title, MessageBoxButtons.OK, icon);
         }
     }
 }

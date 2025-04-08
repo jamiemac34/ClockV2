@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ClockView));
             this.Panel_Clock = new System.Windows.Forms.Panel();
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnView = new System.Windows.Forms.Button();
@@ -51,7 +52,7 @@
             this.btnAdd.TabIndex = 2;
             this.btnAdd.Text = "Add";
             this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            this.btnAdd.Click += new System.EventHandler(this.BtnAddClick);
             // 
             // btnView
             // 
@@ -61,7 +62,7 @@
             this.btnView.TabIndex = 3;
             this.btnView.Text = "View";
             this.btnView.UseVisualStyleBackColor = true;
-            this.btnView.Click += new System.EventHandler(this.btnView_Click);
+            this.btnView.Click += new System.EventHandler(this.BtnViewClick);
             // 
             // btnLoad
             // 
@@ -71,16 +72,16 @@
             this.btnLoad.TabIndex = 4;
             this.btnLoad.Text = "Load";
             this.btnLoad.UseVisualStyleBackColor = true;
-            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
+            this.btnLoad.Click += new System.EventHandler(this.BtnLoadClick);
             // 
-            // label1
+            // lblNextAlarm
             // 
             this.lblNextAlarm.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.lblNextAlarm.Location = new System.Drawing.Point(17, 308);
-            this.lblNextAlarm.Name = "label1";
+            this.lblNextAlarm.Name = "lblNextAlarm";
             this.lblNextAlarm.Size = new System.Drawing.Size(300, 35);
             this.lblNextAlarm.TabIndex = 5;
-            this.lblNextAlarm.Text = "Next @ XX:XX";
+            this.lblNextAlarm.Text = "No alarm set.";
             this.lblNextAlarm.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ClockView
@@ -93,8 +94,10 @@
             this.Controls.Add(this.btnView);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.Panel_Clock);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ClockView";
-            this.Text = "Form1";
+            this.Text = "ClockV2 - QuietClock";
+            this.Load += new System.EventHandler(this.ClockView_Load);
             this.ResumeLayout(false);
 
         }
