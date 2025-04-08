@@ -58,7 +58,7 @@ namespace ClockV2.Presenter
 
         public void OnBtnViewClick()
         {
-            var formPopup = new DialougeView(alarmQueue, () => alarmTokenSource?.Cancel(), UpdateAlarmDisplay);
+            var formPopup = new DialougeView(alarmQueue, () => alarmTokenSource?.Cancel(), UpdateAlarmDisplay, OnSaveAlarms);
             formPopup.FormClosed += (s, e) => UpdateAlarmDisplay();
             formPopup.Show();
         }
@@ -82,28 +82,51 @@ namespace ClockV2.Presenter
             alarmTokenSource?.Cancel();
             alarmTokenSource = new CancellationTokenSource();
 
-            try
-            {
-                await Task.Delay((int)alarmTime.GetDate().Subtract(DateTime.Now).TotalMilliseconds, alarmTokenSource.Token);
-                if (alarmTokenSource.IsCancellationRequested) return;
 
-                alarmQueue.Remove();
-                UpdateAlarmDisplay();
-
-                string alarmMessage = $"Alarm triggered at {alarmTime.GetDate():HH:mm:ss}";
-                view.STNotification("Alarm Triggered", alarmMessage);
-            }
-            catch (TaskCanceledException)
+            if (!CheckForDelay(alarmTime))
             {
+                Console.WriteLine($"Alarm scheduled for {alarmTime.GetDate():F}.");
+
+                try
+                {
+                    await Task.Delay((int)alarmTime.GetDate().Subtract(DateTime.Now).TotalMilliseconds, alarmTokenSource.Token);
+                    if (alarmTokenSource.IsCancellationRequested) return;
+
+                    alarmQueue.Remove();
+                    UpdateAlarmDisplay();
+
+                    string alarmMessage = $"Alarm triggered at {alarmTime.GetDate():HH:mm:ss}";
+                    view.STNotification("Alarm Triggered", alarmMessage);
+                }
+                catch (TaskCanceledException)
+                {
+                }
+
             }
+            else 
+            {
+                Console.WriteLine($"Alarm for {alarmTime.GetDate():f} is more than 21 days away. Scheduling re-check in 20 days.");
+                try
+                {
+                    await Task.Delay(TimeSpan.FromDays(20), alarmTokenSource.Token);
+                    if (alarmTokenSource.IsCancellationRequested) return;
+                    ScheduleAlarm(alarmTime);
+                }
+                catch (TaskCanceledException)
+                {
+                }
+
+                return;
+            }
+            
         }
 
         public void OnBtnLoadClick()
         {
-            alarmQueue.Clear();
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "iCalendar files (*.ics)|*.ics";
-            if (openFileDialog.ShowDialog() != DialogResult.OK) return;
+            if (openFileDialog.ShowDialog() != DialogResult.OK) { return; }
+            alarmQueue.Clear();
 
             string[] lines = File.ReadAllLines(openFileDialog.FileName);
 
@@ -158,6 +181,62 @@ namespace ClockV2.Presenter
                 }
 
                 UpdateAlarmDisplay();
+            }
+        }
+        public void OnSaveAlarms()
+        {
+            StringBuilder icsFile = new StringBuilder();
+            icsFile.AppendLine("BEGIN:VCALENDAR");
+            icsFile.AppendLine("VERSION:2.0");
+            icsFile.AppendLine("CALSCALE:GREGORIAN");
+            icsFile.AppendLine("PRODID:-//ClockV2SCAssingment//AlarmApp v1.0//EN");
+
+            for (int i = 0; i <= alarmQueue.GetLength(); i++)
+            {
+                var alarm = alarmQueue.GetEntry(i).Item;
+                icsFile.AppendLine(alarm.ToCalanderEvent());
+            }
+
+            icsFile.AppendLine("END:VCALENDAR");
+
+            string icsFileClean = icsFile.ToString()
+                .Replace("\r\n\r\n", "\r\n")
+                .Trim();
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "iCalendar Files|*.ics",
+                Title = "Save Alarm Calendar"
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    System.IO.File.WriteAllText(saveFileDialog.FileName, icsFileClean.ToString());
+                    view.ShowMessage("Alarms exported successfully!", "Export Successful", MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    view.ShowMessage($"Error saving file: {ex.Message}", "Error", MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        public bool CheckForDelay(AlarmTime alarmTime)
+        {
+
+            TimeSpan timeUntilAlarm = alarmTime.GetDate() - DateTime.Now;
+            Console.WriteLine($"Alarm Time: {alarmTime.GetDate()}");
+            Console.WriteLine($"Time Until Alarm: {timeUntilAlarm.TotalMinutes} minutes");
+            return timeUntilAlarm > TimeSpan.FromDays(21);
+        }
+
+        public void OnExit()
+        {
+            if (!alarmQueue.IsEmpty())
+            {
+                OnSaveAlarms();
             }
         }
     }

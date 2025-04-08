@@ -59,14 +59,14 @@ namespace ClockV2.Alarm
             }
             ical.AppendLine($"SUMMARY:{Name}");
             ical.AppendLine($"DESCRIPTION:{Description}");
-            ical.AppendLine($"DTSTART:{Date:yyyyMMddTHHmmssZ}");
+            ical.AppendLine($"DTSTART:{Date.ToUniversalTime():yyyyMMddTHHmmssZ}");
             if (SetDate != DateTime.MinValue)
             {
-                ical.AppendLine($"DTSTAMP:{SetDate:yyyyMMddTHHmmssZ}");
+                ical.AppendLine($"DTSTAMP:{SetDate.ToUniversalTime():yyyyMMddTHHmmssZ}");
             }
             else
             {
-                ical.AppendLine($"DTSTAMP:{DateTime.Now:yyyyMMddTHHmmssZ}");
+                ical.AppendLine($"DTSTAMP:{DateTime.Now.ToUniversalTime():yyyyMMddTHHmmssZ}");
             }
             ical.AppendLine("BEGIN:VALARM");
             ical.AppendLine("ACTION:DISPLAY");

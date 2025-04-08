@@ -95,6 +95,7 @@
             this.Controls.Add(this.Panel_Clock);
             this.Name = "ClockView";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.ClockView_Load);
             this.ResumeLayout(false);
 
         }

@@ -17,33 +17,29 @@ namespace ClockV2.View
         private ReverseSortedArray<AlarmTime> alarmQueue;
         private DialougeViewPresenter presenter;
 
-        public DialougeView(ReverseSortedArray<AlarmTime> alarmQueue, Action cancelAlarmCallback, Action updateAlarmDisplayCallback)
+        public DialougeView(ReverseSortedArray<AlarmTime> alarmQueue, Action cancelAlarmCallback, Action updateAlarmDisplayCallback, Action OnSaveAlarms)
         {
             InitializeComponent();
             this.alarmQueue = alarmQueue;
-            this.presenter = new DialougeViewPresenter(this, alarmQueue, cancelAlarmCallback, updateAlarmDisplayCallback);
+            this.presenter = new DialougeViewPresenter(this, alarmQueue, cancelAlarmCallback, updateAlarmDisplayCallback, OnSaveAlarms);
             alarmQueue.PopulateList(lbAlarms);
         }
 
-        // Method to display alarms in the list box (called by the Presenter)
         public void DisplayAlarms()
         {
             alarmQueue.PopulateList(lbAlarms);
         }
 
-        // Method to show a message (called by the Presenter for success/failure)
         public void ShowMessage(string message, string title, MessageBoxIcon icon)
         {
             MessageBox.Show(message, title, MessageBoxButtons.OK, icon);
         }
 
-        // Method to handle saving the alarms to an ICS file
         private void BtnSaveClick(object sender, EventArgs e)
         {
             presenter.OnSaveAlarms();
         }
 
-        // Method to handle removing an alarm
         private void BtnRemoveClick(object sender, EventArgs e)
         {
             presenter.OnRemoveAlarm(lbAlarms.SelectedIndex);

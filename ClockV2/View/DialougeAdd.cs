@@ -25,7 +25,6 @@ namespace ClockV2.View
             this.alarmQueue = alarmQueue;
             this.presenter = new DialougeAddPresenter(this, alarmQueue);
             DTPicker.MinDate = DateTime.Now;
-            DTPicker.MaxDate = DateTime.Now.AddDays(21);
             DTPicker.CustomFormat = "yyyy/MM/dd @ HH:mm:ss";
 
             CBTriggerTime.Items.AddRange(new object[]
@@ -48,7 +47,6 @@ namespace ClockV2.View
 
             ToolTip triggerToolTip = new ToolTip();
             triggerToolTip.SetToolTip(CBTriggerTime, "Sets how long before the event the alarm will trigger.");
-
         }
 
         public void ShowErrorMessage(string message)

@@ -49,9 +49,11 @@ namespace ClockV2
             };
 
             var trayMenu = new ContextMenuStrip();
-            trayMenu.Items.Add("Show", null, STMenuShowClick);
+            trayMenu.Items.Add("Show Clock", null, STMenuShowClick);
             trayMenu.Items.Add("Add Alarm", null, BtnAddClick);
             trayMenu.Items.Add("View Alarms", null, BtnViewClick);
+            trayMenu.Items.Add("Save Alarms", null, BtnSaveClick);
+            trayMenu.Items.Add("Load Alarms", null, BtnLoadClick);
             trayMenu.Items.Add("Exit", null, STMenuExitClick);
 
             systemTray.ContextMenuStrip = trayMenu;
@@ -62,6 +64,7 @@ namespace ClockV2
                 {
                     if (this.WindowState == FormWindowState.Normal)
                     {
+                        presenter.OnExit();
                         Application.Exit();
                     }
                     else
@@ -124,6 +127,7 @@ namespace ClockV2
 
         private void STMenuExitClick(object sender, EventArgs e)
         {
+            presenter.OnExit();
             Application.Exit();
         }
 
@@ -155,6 +159,19 @@ namespace ClockV2
 
         }
 
-        
+        private void ClockView_Load(object sender, EventArgs e)
+        {
+            presenter.OnBtnLoadClick();
+        }
+
+        private void BtnSaveClick(object sender, EventArgs e)
+        {
+            presenter.OnSaveAlarms();
+        }
+
+        public void ShowMessage(string message, string title, MessageBoxIcon icon)
+        {
+            MessageBox.Show(message, title, MessageBoxButtons.OK, icon);
+        }
     }
 }
