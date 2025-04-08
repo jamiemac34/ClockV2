@@ -48,10 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Alarm\AlarmTIme.cs" />
-    <Compile Include="Alarm\ReverseSortedArray.cs" />
+    <Compile Include="Model\AlarmTIme.cs" />
+    <Compile Include="Model\ReverseSortedArray.cs" />
     <Compile Include="Helpers\ClockDrawingHelper.cs" />
     <Compile Include="Presenter\ClockPresenter.cs" />
+    <Compile Include="Presenter\DialougeAddPresenter.cs" />
+    <Compile Include="Presenter\DialougeViewPresenter.cs" />
     <Compile Include="View\ClockView.cs">
       <SubType>Form</SubType>
     </Compile>

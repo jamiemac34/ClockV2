@@ -8,88 +8,57 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ClockV2.Alarm;
+using ClockV2.Presenter;
 
 namespace ClockV2.View
 {
     public partial class DialougeView : Form
     {
         private ReverseSortedArray<AlarmTime> alarmQueue;
-        private Action cancelAlarmCallback;
-        private Action updateAlarmDisplayCallback;
+        private DialougeViewPresenter presenter;
 
         public DialougeView(ReverseSortedArray<AlarmTime> alarmQueue, Action cancelAlarmCallback, Action updateAlarmDisplayCallback)
         {
             InitializeComponent();
             this.alarmQueue = alarmQueue;
-            this.cancelAlarmCallback = cancelAlarmCallback;
-            this.updateAlarmDisplayCallback = updateAlarmDisplayCallback;
+            this.presenter = new DialougeViewPresenter(this, alarmQueue, cancelAlarmCallback, updateAlarmDisplayCallback);
             alarmQueue.PopulateList(lbAlarms);
         }
 
+        // Method to display alarms in the list box (called by the Presenter)
+        public void DisplayAlarms()
+        {
+            alarmQueue.PopulateList(lbAlarms);
+        }
+
+        // Method to show a message (called by the Presenter for success/failure)
+        public void ShowMessage(string message, string title, MessageBoxIcon icon)
+        {
+            MessageBox.Show(message, title, MessageBoxButtons.OK, icon);
+        }
+
+        // Method to handle saving the alarms to an ICS file
         private void BtnSaveClick(object sender, EventArgs e)
         {
-            StringBuilder icsFile = new StringBuilder();
-
-            icsFile.AppendLine("BEGIN:VCALENDAR");
-            icsFile.AppendLine("VERSION:2.0");
-            icsFile.AppendLine("CALSCALE:GREGORIAN");
-            icsFile.AppendLine("PRODID:-//ClockV2SCAssingment//AlarmApp v1.0//EN");
-            for (int i = 0; i <= alarmQueue.GetLength(); i++)
-            {
-                var alarm = alarmQueue.GetEntry(i).Item;
-                icsFile.AppendLine(alarm.ToCalanderEvent());
-            }
-            icsFile.AppendLine("END:VCALENDAR");
-
-            string icsFileClean = icsFile.ToString()
-            .Replace("\r\n\r\n", "\r\n")
-            .Trim();
-
-            SaveFileDialog saveFileDialog = new SaveFileDialog
-            {
-                Filter = "iCalendar Files|*.ics",
-                Title = "Save Alarm Calendar"
-            };
-
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    System.IO.File.WriteAllText(saveFileDialog.FileName, icsFileClean.ToString());
-                    MessageBox.Show("Alarms exported successfully!", "Export Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error saving file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            presenter.OnSaveAlarms();
         }
 
+        // Method to handle removing an alarm
         private void BtnRemoveClick(object sender, EventArgs e)
         {
-            if (lbAlarms.SelectedIndex == 0)
-            {
-                cancelAlarmCallback?.Invoke();
-                
-            }
-            alarmQueue.RemoveViaIndex(lbAlarms.SelectedIndex);
+            presenter.OnRemoveAlarm(lbAlarms.SelectedIndex);
             lbAlarms.Items.RemoveAt(lbAlarms.SelectedIndex);
-            updateAlarmDisplayCallback.Invoke();
-
         }
 
-        private void LBAlarmsSelectedIndexChanged(object sender, EventArgs e)
+
+        public void LBAlarmsSelectedIndexChanged(object sender, EventArgs e)
         {
-            if(lbAlarms.SelectedIndex > -1)
-            {
-                btnRemove.Enabled = true;
-            }
-            else
-            {
-                btnRemove.Enabled = false;
-            }
+            presenter.OnLBAlarmChange(lbAlarms.SelectedIndex);
         }
 
-       
+        public void EnableRemoveBtn(bool cond)
+        {
+            btnRemove.Enabled = cond;
+        }
     }
 }

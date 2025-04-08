@@ -40,7 +40,6 @@ namespace ClockV2
                 .SetValue(Panel_Clock, true, null);
 
             currentTime = DateTime.Now;
-            alarmQueue = new ReverseSortedArray<AlarmTime>(99);
 
             systemTray = new NotifyIcon
             {
@@ -92,6 +91,30 @@ namespace ClockV2
             };
         }
 
+        public void SetPresenter(ClockPresenter presenter)
+        {
+            this.presenter = presenter;
+        }
+
+        public void UpdateAlarmDisplay(string alarmMessage)
+        {
+            lblNextAlarm.Text = alarmMessage;
+        }
+
+        public void UpdateClock(DateTime currentTime)
+        {
+            this.currentTime = currentTime;
+            Panel_Clock.Invalidate(); // Trigger a redraw of the panel
+        }
+
+        private void Panel_Clock_Paint(object sender, PaintEventArgs e)
+        {
+            if (presenter == null) return;
+
+            var g = e.Graphics;
+            drawingHelper.DrawClock(g, currentTime, Panel_Clock.Width, Panel_Clock.Height);
+        }
+
         private void STMenuShowClick(object sender, EventArgs e)
         {
             this.Show();
@@ -109,37 +132,16 @@ namespace ClockV2
             systemTray.ShowBalloonTip(3000, title, message, ToolTipIcon.Info);
         }
 
-        public void SetPresenter(ClockPresenter presenter)
-        {
-            this.presenter = presenter;
-        }
-
-        public void UpdateClock(DateTime currentTime)
-        {
-            this.currentTime = currentTime;
-            Panel_Clock.Invalidate(); // Trigger a redraw of the panel
-        }
-
-        private void Panel_Clock_Paint(object sender, PaintEventArgs e)
-        {
-            if (presenter == null) return;
-
-            var g = e.Graphics;
-            drawingHelper.DrawClock(g, currentTime, Panel_Clock.Width, Panel_Clock.Height);
-        }
-
+        
         private void BtnAddClick(object sender, EventArgs e)
         {
-            var formPopup = new DialougeAdd(alarmQueue);
-            formPopup.FormClosed += HandleAddFormClose;
-            formPopup.Show(this);
+            presenter.OnBtnAddClick();
+
         }
 
         private void BtnViewClick(object sender, EventArgs e)
         {
-            var formPopup = new DialougeView(alarmQueue, () => alarmTokenSource?.Cancel(), UpdateAlarmDisplay);
-            formPopup.FormClosed += HandleAddFormClose;
-            formPopup.Show(this);
+            presenter.OnBtnViewClick();
         }
 
         private void BtnLoadClick(object sender, EventArgs e)
@@ -149,50 +151,10 @@ namespace ClockV2
 
         public void HandleAddFormClose(object sender, EventArgs e)
         {
-            UpdateAlarmDisplay();
+            presenter.UpdateAlarmDisplay();
 
         }
 
-        public void UpdateAlarmDisplay()
-        {
-            if ((alarmQueue.IsEmpty()))
-            {
-                lblNextAlarm.Text = "No alarm set.";
-            }
-            else if (!(alarmQueue.Head() == alarmSet) && !(alarmQueue.IsEmpty()))
-            {
-                alarmSet = alarmQueue.Head();
-                lblNextAlarm.Text = "Next on " + alarmQueue.Head().ToString();
-                ScheduleAlarm(alarmQueue.Head());
-            }
-            
-            
-        }
-
-        public async void ScheduleAlarm(AlarmTime alarmTime)
-        {
-
-            alarmTokenSource?.Cancel();
-            alarmTokenSource = new CancellationTokenSource();
-
-            try
-            {
-
-                await Task.Delay((int)alarmTime.GetDate().Subtract(DateTime.Now).TotalMilliseconds, alarmTokenSource.Token);
-                if (alarmTokenSource.IsCancellationRequested)
-                {
-                    return;
-                }
-                alarmQueue.Remove();
-                UpdateAlarmDisplay();
-                string alarmMessage = $"Alarm triggered at {alarmTime.GetDate():HH:mm:ss}";
-                systemTray.ShowBalloonTip(3000, "Alarm Triggered", alarmMessage, ToolTipIcon.Info);
-            }
-            catch (TaskCanceledException)
-            {
-
-            }
-
-        }
+        
     }
 }

@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ClockV2.Alarm;
+using ClockV2.Presenter;
 using PriorityQueue;
 
 namespace ClockV2.View
@@ -16,11 +17,13 @@ namespace ClockV2.View
     public partial class DialougeAdd : Form
     {
         private ReverseSortedArray<AlarmTime> alarmQueue;
+        private DialougeAddPresenter presenter;
 
         public DialougeAdd(ReverseSortedArray<AlarmTime> alarmQueue)
         {
             InitializeComponent();
             this.alarmQueue = alarmQueue;
+            this.presenter = new DialougeAddPresenter(this, alarmQueue);
             DTPicker.MinDate = DateTime.Now;
             DTPicker.MaxDate = DateTime.Now.AddDays(21);
             DTPicker.CustomFormat = "yyyy/MM/dd @ HH:mm:ss";
@@ -48,92 +51,20 @@ namespace ClockV2.View
 
         }
 
+        public void ShowErrorMessage(string message)
+        {
+            MessageBox.Show(message, "Alarm Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        // Method to be called by the Presenter to show a warning message
+        public void ShowWarningMessage(string message)
+        {
+            MessageBox.Show(message, "Alarm Error - Missing Name/Description", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
         private void BtnFormAddClick(object sender, EventArgs e)
         {
-            // taken from https://stackoverflow.com/questions/911717/split-string-convert-tolistint-in-one-line
-            var timeInt = DTPicker.Text.Replace(" @ ", "/").Replace(":", "/")
-            .Split('/')
-            .Where(x => int.TryParse(x, out _))
-            .Select(int.Parse)
-            .ToList();
-
-            DateTime selectedDT = new DateTime(timeInt[0], timeInt[1], timeInt[2], timeInt[3], timeInt[4], timeInt[5]);
-
-            TimeSpan epochTime = selectedDT - new DateTime(1970, 1, 1);
-
-            int comDT = DateTime.Compare(DateTime.Now, selectedDT);
-
-            TimeSpan triggerTime = TimeSpan.Zero;
-            switch (CBTriggerTime.SelectedIndex)
-            {
-                case 0:
-                    triggerTime = TimeSpan.Zero;
-                    break;
-                case 1:
-                    triggerTime = TimeSpan.FromMinutes(-5);
-                    break;
-                case 2:
-                    triggerTime = TimeSpan.FromMinutes(-10);
-                    break;
-                case 3:
-                    triggerTime = TimeSpan.FromMinutes(-15);
-                    break;
-                case 4:
-                    triggerTime = TimeSpan.FromMinutes(-30);
-                    break;
-                case 5:
-                    triggerTime = TimeSpan.FromHours(-1);
-                    break;
-                case 6:
-                    triggerTime = TimeSpan.FromHours(-2);
-                    break;
-                case 7:
-                    triggerTime = TimeSpan.FromHours(-6);
-                    break;
-                case 8:
-                    triggerTime = TimeSpan.FromHours(-12);
-                    break;
-                case 9:
-                    triggerTime = TimeSpan.FromDays(-1);
-                    break;
-                case 10:
-                    triggerTime = TimeSpan.FromDays(-2);
-                    break;
-                case 11:
-                    triggerTime = TimeSpan.FromDays(-3);
-                    break;
-                case 12:
-                    triggerTime = TimeSpan.FromDays(-7);
-                    break;
-            }
-
-            AlarmTime selectedAT = new AlarmTime(DTPicker.Text.ToString(), selectedDT, triggerTime, txtName.Text, txtDescription.Text);
-
-            if (comDT >= 1)
-            {
-                MessageBox.Show("Alarm cannot be set to a past time", "Alarm Error - Invalid Time",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            else if (alarmQueue.Contains(selectedAT))
-            {
-                MessageBox.Show("An alarm is already set to that time", "Alarm Error - Already Set",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            else if (txtName.Text == "Enter alarm name..." || txtDescription.Text == "Enter alarm description...")
-            {
-                MessageBox.Show("The name and description cannot be left blank.", "Alarm Error - Missing Name/Description", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            else
-            {
-                alarmQueue.Add(selectedAT, (int)epochTime.TotalSeconds);
-                this.Close();
-            }
-
-
-
+            presenter.OnBtnFormAddClick(DTPicker.Value, CBTriggerTime.SelectedIndex, txtName.Text, txtDescription.Text);
         }
 
         private void SetPlaceholderText(object sender, EventArgs e)
