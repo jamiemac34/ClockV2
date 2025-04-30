@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClockV2", "ClockV2\ClockV2.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PriorityQueue", "..\PriorityQueue\PriorityQueue\PriorityQueue.csproj", "{5EEC6FD2-5A0F-43D8-8BFD-A30F3DA7DFFA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClockV2.Tests", "ClockV2.Tests\ClockV2.Tests.csproj", "{6032D53E-E6CE-41C0-BBF3-13E197DE8C9C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{5EEC6FD2-5A0F-43D8-8BFD-A30F3DA7DFFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EEC6FD2-5A0F-43D8-8BFD-A30F3DA7DFFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EEC6FD2-5A0F-43D8-8BFD-A30F3DA7DFFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6032D53E-E6CE-41C0-BBF3-13E197DE8C9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6032D53E-E6CE-41C0-BBF3-13E197DE8C9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6032D53E-E6CE-41C0-BBF3-13E197DE8C9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6032D53E-E6CE-41C0-BBF3-13E197DE8C9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
