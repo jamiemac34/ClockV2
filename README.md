@@ -1,14 +1,13 @@
-# ClockV2 - Multi-Alarm Clock - Assessment 2 Starting Repo
+# ClockV2 - Quiet Clock
 
-This repository serves as the starting repository for **Assessment 2** of the **BSc Computing** program at the **University of the Highlands and Islands (UHI)**. 
-This repository is part of the module **UG409765 - Software Construction** and serves as the foundation for the multi-alarm clock application.
+This repository serves to document, backup and manage an attempt at **Assessment 2** part of the **UG409765 - Software Construction** module of the **BSc Computing** program at the **University of the Highlands and Islands (UHI)**. 
 
 ## **Overview**
-This repository contains an analogue clock implemented using the **Model-View-Presenter (MVP)** architecture. Students will extend this application to include multi-alarm 
-functionality as described in the assessment brief. The starting code is designed to help students focus on implementing new features while adhering to the 
-existing MVP design pattern.
+ClockV2, or as this interpretation is named, Quiet Clock, contains an analouge clock implemented with adherence to the **Model-View-Presenter (MVP)** architecture. Per the requirements it has been expanded to include
+adding, editing (deleting), loading & saving alarms using the previous assignment's priorityqueue & adhering to the iCal format when loading & saving.
 
----
+It then has been expanded beyond those requirements to include displaying a list of the set alarms, scheduling reminders (for iCal programs) & being fully functional while minimised to the taskbar (where it's name was derived from).
+
 
 ## **Repository Structure**
 
@@ -17,19 +16,11 @@ existing MVP design pattern.
 - `ClockPresenter.cs`: The Presenter component, containing the business logic for updating and controlling the analogue clock.
 - `ClockDrawingHelper.cs`: A helper class for drawing the clock face and hands.
 
+- `DialougeAddView.cs`: The View component of the add dialouge, responsible for allowing the user to set alarms.
+- `DialougeAdd.cs`: The Presenter component, containing the business logic for adding alarms.
+- `DialougeView.cs`: The View component of the view dialouge, responsible for view, remove & export alarms.
+- `DialougeViewPresenter.cs`: The Presenter component, containing the business logic for removing & exporting alarms.
+- `AlarmTime.cs`: A Model component of the analogue clock application, heavily used throughout by every view & presenter, responsible for storing alarms.
+- `ReverseSortedArray.cs`: A modifiction to PriorityQueue's sorted array for better compatibility with ClockV2.
+
 ---
-
-## **Submission**
-1. Fork this repository and work on your own copy.
-2. Push all changes to your forked repository.
-3. Please don't create public clones containing solutions.
-
----
-
-## **Important Notes**
-- Keep track of your development process using Git version control.
-- Regularly commit your progress with meaningful and descriptive messages.
-- Refer to the assessment brief for detailed requirements and marking criteria.
-
-### **Contact**
-For any issues or questions, please reach out to your module instructor.
