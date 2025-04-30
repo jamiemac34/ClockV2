@@ -14,6 +14,9 @@ using System.Windows.Forms;
 
 namespace ClockV2.Presenter
 {
+    /// <summary>
+    /// The presenter class for the clock application. It handles the interaction between the model and the view.
+    /// </summary>
     public class ClockPresenter
     {
         private readonly ClockModel model;
@@ -22,7 +25,11 @@ namespace ClockV2.Presenter
         private readonly ReverseSortedArray<AlarmTime> alarmQueue;
         private CancellationTokenSource alarmTokenSource;
 
-
+        /// <summary>
+        /// Constructor for the ClockPresenter class.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="view"></param>
         public ClockPresenter(ClockModel model, ClockView view)
         {
             this.model = model;
@@ -40,6 +47,10 @@ namespace ClockV2.Presenter
 
         }
 
+
+        /// <summary>
+        /// Updates the clock display in the View.
+        /// </summary>
         private void UpdateClock()
         {
             // Fetch the current time from the Model
@@ -49,6 +60,10 @@ namespace ClockV2.Presenter
             view.Invoke(new Action(() => view.UpdateClock(currentTime)));
         }
 
+
+        /// <summary>
+        /// Opens the Add window
+        /// </summary>
         public void OnBtnAddClick()
         {
             var formPopup = new DialougeAdd(alarmQueue);
@@ -56,6 +71,10 @@ namespace ClockV2.Presenter
             formPopup.Show();
         }
 
+
+        /// <summary>
+        /// Opens the View window
+        /// </summary>
         public void OnBtnViewClick()
         {
             var formPopup = new DialougeView(alarmQueue, () => alarmTokenSource?.Cancel(), UpdateAlarmDisplay, OnSaveAlarms);
@@ -63,6 +82,9 @@ namespace ClockV2.Presenter
             formPopup.Show();
         }
 
+        /// <summary>
+        /// Logic to handle the text beneath the clock. It gets called frequently.
+        /// </summary>
         public void UpdateAlarmDisplay()
         {
             if (alarmQueue.IsEmpty())
@@ -77,6 +99,10 @@ namespace ClockV2.Presenter
             }
         }
 
+        /// <summary>
+        /// Logic for handling scheduling an alarm. Takes in an AlarmTime (the top of alarmQueue), then checks if it can be scheduled within async's limit, if it can, it will be, otherwise a recheck will be scheduled for 20 days time.
+        /// </summary>
+        /// <param name="alarmTime">The passed alarm time, always the head of the queue</param>
         public async void ScheduleAlarm(AlarmTime alarmTime)
         {
             alarmTokenSource?.Cancel();
@@ -121,6 +147,9 @@ namespace ClockV2.Presenter
             
         }
 
+        /// <summary>
+        /// Opens a dialouge to select a file, if provided it will clear the alarmqueue and load the alarms from the file into it, otherwise it will just return.
+        /// </summary>
         public void OnBtnLoadClick()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -191,6 +220,10 @@ namespace ClockV2.Presenter
             }
             UpdateAlarmDisplay();
         }
+
+        /// <summary>
+        /// Saves the alarms to a file. It will open a save file dialog, and if a file is selected, it will write the alarms to it in iCalendar format.
+        /// </summary>
         public void OnSaveAlarms()
         {
             StringBuilder icsFile = new StringBuilder();
@@ -231,6 +264,11 @@ namespace ClockV2.Presenter
             }
         }
 
+        /// <summary>
+        /// For use with scheduling alarms. Checks if the alarm is more than 21 days away, if it is, it will return true, otherwise false.
+        /// </summary>
+        /// <param name="alarmTime">The alarmtime that was passed to ScheduleAlarm</param>
+        /// <returns></returns>
         public bool CheckForDelay(AlarmTime alarmTime)
         {
 
@@ -240,6 +278,9 @@ namespace ClockV2.Presenter
             return timeUntilAlarm > TimeSpan.FromDays(21);
         }
 
+        /// <summary>
+        /// Prompts the user to save their alarms on exit.
+        /// </summary>
         public void OnExit()
         {
             if (!alarmQueue.IsEmpty())

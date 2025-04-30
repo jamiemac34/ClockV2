@@ -8,6 +8,10 @@ using PriorityQueue;
 
 namespace ClockV2.Alarm
 {
+    /// <summary>
+    /// A modifiction of priorityqueue's SortedArray, reverses the order and adds some clock-specific functions.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class ReverseSortedArray<T> : PriorityQueue<T>
     {
         private readonly PriorityItem<T>[] storage;

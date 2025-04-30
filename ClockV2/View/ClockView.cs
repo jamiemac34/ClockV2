@@ -18,6 +18,9 @@ using System.Media;
 
 namespace ClockV2
 {
+    /// <summary>
+    /// ClockView class represents the main view of the clock application.
+    /// </summary>
     public partial class ClockView : Form
     {
         private ClockPresenter presenter;
@@ -29,7 +32,9 @@ namespace ClockV2
         private NotifyIcon systemTray;
 
 
-
+        /// <summary>
+        /// Constructor for the ClockView class, also handles the logic to allow the app to minimise to the taskbar.
+        /// </summary>
         public ClockView()
         {
             InitializeComponent();
@@ -94,22 +99,39 @@ namespace ClockV2
             };
         }
 
+        /// <summary>
+        /// Sets the presenter for the ClockView.
+        /// </summary>
+        /// <param name="presenter"></param>
         public void SetPresenter(ClockPresenter presenter)
         {
             this.presenter = presenter;
         }
 
+        /// <summary>
+        /// Updates the display of the next alarm.
+        /// </summary>
+        /// <param name="alarmMessage"></param>
         public void UpdateAlarmDisplay(string alarmMessage)
         {
             lblNextAlarm.Text = alarmMessage;
         }
 
+        /// <summary>
+        /// Updates the clock display with the current time.
+        /// </summary>
+        /// <param name="currentTime"></param>
         public void UpdateClock(DateTime currentTime)
         {
             this.currentTime = currentTime;
             Panel_Clock.Invalidate(); // Trigger a redraw of the panel
         }
 
+        /// <summary>
+        /// Handles the paint event for the clock panel.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Panel_Clock_Paint(object sender, PaintEventArgs e)
         {
             if (presenter == null) return;
@@ -118,6 +140,11 @@ namespace ClockV2
             drawingHelper.DrawClock(g, currentTime, Panel_Clock.Width, Panel_Clock.Height);
         }
 
+        /// <summary>
+        ///  Handles the click event for the system tray menu to show the clock.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void STMenuShowClick(object sender, EventArgs e)
         {
             this.Show();
@@ -125,50 +152,96 @@ namespace ClockV2
             this.ShowInTaskbar = true;
         }
 
+        /// <summary>
+        /// Handles the click event for the system tray menu to exit the application.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void STMenuExitClick(object sender, EventArgs e)
         {
             presenter.OnExit();
             Application.Exit();
         }
 
+        /// <summary>
+        /// Displays a notification in the system tray.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
         public void STNotification(string title, string message)
         {
             systemTray.ShowBalloonTip(3000, title, message, ToolTipIcon.Info);
         }
 
-        
+
+        /// <summary>
+        /// Handles the click event for the "Add" button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnAddClick(object sender, EventArgs e)
         {
             presenter.OnBtnAddClick();
 
         }
 
+        /// <summary>
+        /// Handles the click event for the "View" button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnViewClick(object sender, EventArgs e)
         {
             presenter.OnBtnViewClick();
         }
 
+        /// <summary>
+        ///  Handles the click event for the "Load" button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnLoadClick(object sender, EventArgs e)
         {
             presenter.OnBtnLoadClick();
         }
 
+        /// <summary>
+        /// Handles the click event for the "Save" button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void HandleAddFormClose(object sender, EventArgs e)
         {
             presenter.UpdateAlarmDisplay();
 
         }
 
+        /// <summary>
+        /// Handles the load event for the ClockView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ClockView_Load(object sender, EventArgs e)
         {
             presenter.OnBtnLoadClick();
         }
 
+        /// <summary>
+        /// Handles the click event for the "Save" button in the system tray menu.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSaveClick(object sender, EventArgs e)
         {
             presenter.OnSaveAlarms();
         }
 
+        /// <summary>
+        /// Displays a message box with the specified message, title, and icon.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="title"></param>
+        /// <param name="icon"></param>
         public void ShowMessage(string message, string title, MessageBoxIcon icon)
         {
             MessageBox.Show(message, title, MessageBoxButtons.OK, icon);

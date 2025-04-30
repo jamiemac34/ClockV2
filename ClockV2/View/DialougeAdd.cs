@@ -14,11 +14,18 @@ using PriorityQueue;
 
 namespace ClockV2.View
 {
+    /// <summary>
+    /// This class represents a dialog for adding alarms.
+    /// </summary>
     public partial class DialougeAdd : Form
     {
         private ReverseSortedArray<AlarmTime> alarmQueue;
         private DialougeAddPresenter presenter;
 
+        /// <summary>
+        /// Constructor for the DialougeAdd class.
+        /// </summary>
+        /// <param name="alarmQueue"></param>
         public DialougeAdd(ReverseSortedArray<AlarmTime> alarmQueue)
         {
             InitializeComponent();
@@ -49,22 +56,39 @@ namespace ClockV2.View
             triggerToolTip.SetToolTip(CBTriggerTime, "Sets how long before the event the alarm will trigger.");
         }
 
+        /// <summary>
+        /// Handles displaying error messages.
+        /// </summary>
+        /// <param name="message"></param>
         public void ShowErrorMessage(string message)
         {
             MessageBox.Show(message, "Alarm Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        // Method to be called by the Presenter to show a warning message
+        /// <summary>
+        /// Handles displaying warning messages.
+        /// </summary>
+        /// <param name="message"></param>
         public void ShowWarningMessage(string message)
         {
             MessageBox.Show(message, "Alarm Error - Missing Name/Description", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
+        /// <summary>
+        /// Handles the click event for the "Add" button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnFormAddClick(object sender, EventArgs e)
         {
             presenter.OnBtnFormAddClick(DTPicker.Text, DTPicker.Value, CBTriggerTime.SelectedIndex, txtName.Text, txtDescription.Text);
         }
 
+        /// <summary>
+        /// Handles the default text for the textboxes.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SetPlaceholderText(object sender, EventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -84,6 +108,11 @@ namespace ClockV2.View
             }
         }
 
+        /// <summary>
+        /// Handles removing the placeholder text when the user focuses on the textbox.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RemovePlaceholderText(object sender, EventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -95,27 +124,52 @@ namespace ClockV2.View
             }
         }
 
+        /// <summary>
+        /// Handles applying 'RemovePlaceholderText' to the name textbox.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TxtNameFocusGot(object sender, EventArgs e)
         {
             RemovePlaceholderText(sender, e);
         }
 
+        /// <summary>
+        /// Handles applying 'RemovePlaceholderText' to the description textbox.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TxtDescriptionFocusGot(object sender, EventArgs e)
         {
             RemovePlaceholderText(sender, e);
         }
 
+        /// <summary>
+        /// Handles applying 'SetPlaceholderText' to the name textbox.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TxtNameFocusLost(object sender, EventArgs e)
         {
             SetPlaceholderText(sender, e);
         }
 
+        /// <summary>
+        /// Handles applying 'SetPlaceholderText' to the description textbox.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TxtDescriptionFocusLost(object sender, EventArgs e)
         {
             SetPlaceholderText(sender, e);
         }
 
 
+        /// <summary>
+        /// Handles the load event for the form.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FormLoad(object sender, EventArgs e)
         {
             SetPlaceholderText(txtName, e);

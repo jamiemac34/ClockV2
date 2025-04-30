@@ -10,17 +10,33 @@ using ClockV2.View;
 
 namespace ClockV2.Presenter
 {
+    /// <summary>
+    /// Presenter class for the Add Alarm dialog.
+    /// </summary>
     public class DialougeAddPresenter
     {
         private readonly DialougeAdd view;
         private readonly ReverseSortedArray<AlarmTime> alarmQueue;
 
+        /// <summary>
+        /// Constructor for the DialougeAddPresenter class.
+        /// </summary>
+        /// <param name="view"></param>
+        /// <param name="alarmQueue">The ReverseSortedArray holding the alarms</param>
         public DialougeAddPresenter(DialougeAdd view, ReverseSortedArray<AlarmTime> alarmQueue)
         {
             this.view = view;
             this.alarmQueue = alarmQueue;
         }
 
+        /// <summary>
+        /// Method to handle the click event of the "Add" button in the Add Alarm dialog.
+        /// </summary>
+        /// <param name="displayTime">The string taken from the datetime picker</param>
+        /// <param name="selectedDT">The time taken from the datetime picker</param>
+        /// <param name="selectedTriggerIndex">Used to pass the selected delay value into the alarm queue</param>
+        /// <param name="name">The user-entered alarm name</param>
+        /// <param name="description">The user-entered alarm description</param>
         public void OnBtnFormAddClick(string displayTime, DateTime selectedDT, int selectedTriggerIndex, string name, string description)
         {
             TimeSpan triggerTime = GetTriggerTimeFromSelection(selectedTriggerIndex);
@@ -51,6 +67,11 @@ namespace ClockV2.Presenter
 
         }
 
+        /// <summary>
+        /// Method to convert the selected index of the trigger time combo box into a TimeSpan.
+        /// </summary>
+        /// <param name="selectedIndex">Index corrosponding to a delay timespan, taken from the user's selection</param>
+        /// <returns></returns>
         private TimeSpan GetTriggerTimeFromSelection(int selectedIndex)
         {
             switch (selectedIndex)
